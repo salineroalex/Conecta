@@ -1,14 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
+
+import model.ConvocatoriaExamen;
 
 /**
  *
  * @author alexs, iratig
  */
-public class DaoDBImplementation {
-    
+public class DaoDBImplementation implements DAO{
+
+    @Override
+    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) {
+        return false;
+    }
+
+    @Override
+    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) {
+        return null;
+    }
 }
