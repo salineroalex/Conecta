@@ -11,4 +11,11 @@ package controller;
  */
 public class DaoFactory {
     
+   /* public static DAO getFile(){
+        return new DaoFileImplementation();
+    } */
+    
+    public static DAO getDB(){
+        return new DaoDBImplementation();
+    }
 }

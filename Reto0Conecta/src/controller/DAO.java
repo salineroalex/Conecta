@@ -5,10 +5,21 @@
  */
 package controller;
 
+import exceptions.PersonalizedException;
+import java.util.List;
+import model.ConvocatoriaExamen;
+import model.Enunciado;
+import model.ResultadoCreacionEnunciado;
+import model.UnidadDidactica;
+
 /**
  *
  * @author alexs, iratig
  */
 public interface DAO {
+    public boolean crearUnidadDidactica(UnidadDidactica unidadDidactica);
+   
+    public Integer crearEnunciado(Enunciado enunciado);
+    public List<Enunciado> listarEnunciados(String convocataria);
     
 }

@@ -5,10 +5,29 @@
  */
 package controller;
 
+import exceptions.PersonalizedException;
+import java.util.List;
+import model.Enunciado;
+import model.ResultadoCreacionEnunciado;
+import model.UnidadDidactica;
+
 /**
  *
  * @author alexs, iratig
  */
 public class Controller {
-    
+    private static DAO dao;
+    public boolean addUnidadDidactica(UnidadDidactica unidadDidactica){
+        dao = DaoFactory.getDB();
+        return dao.crearUnidadDidactica(unidadDidactica);
+    }
+    public Integer addEnunciado(Enunciado enunciado){
+        dao = DaoFactory.getDB();
+        return dao.crearEnunciado(enunciado);
+        
+    }
+     public List<Enunciado> listarEnunciados(String checking ){
+         dao = DaoFactory.getDB();
+         return dao.listarEnunciados(checking);
+     }
 }

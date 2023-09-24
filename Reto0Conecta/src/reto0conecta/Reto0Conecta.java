@@ -5,6 +5,8 @@
  */
 package reto0conecta;
 
+import view.Menu;
+
 /**
  *
  * @author alexs, iratig
@@ -15,7 +17,7 @@ public class Reto0Conecta {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Menu.menu();
     }
     
 }
