@@ -52,6 +52,11 @@ public class Menu {
 
     }
 
+    /**
+     * Creates a new Unidad Didactica by collecting data from the user and
+     * adding it to the database using the Controller. Prints a success message
+     * upon successful creation.
+     */
     public static void crearUnidad() {
         UnidadDidactica unidadDidactica = new UnidadDidactica();
         unidadDidactica.setDatos();
@@ -65,6 +70,11 @@ public class Menu {
 
     }
 
+    /**
+     * Creates a new Enunciado by collecting data from the user and adding it to
+     * the database using the Controller. Prints a success message upon
+     * successful creation.
+     */
     private static void crearEnunciado() {
         Enunciado enunciado = new Enunciado();
         enunciado.setDatos();
@@ -77,6 +87,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Lists Enunciado objects associated with a specified educational unit
+     * provided by the user. Prints the details of each Enunciado if available.
+     */
     private static void listarEnunciado() {
         String unidadDidactica;
         System.out.println("Insert the educational unit: ");

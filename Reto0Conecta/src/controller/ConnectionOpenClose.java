@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
+ * This class handles the opening and closing of database connections using
+ * MySQL. It retrieves the database connection information from a
+ * "config.properties" file and provides methods to open and close connections.
  *
- * @author irati
+ * @author Irati Garzón
  */
 class ConnectionOpenClose {
 
@@ -17,9 +20,11 @@ class ConnectionOpenClose {
     private String user;
     private String pass;
 
-    // CONSTRUCTOR
-    // Method to open connection with MySQL, gets the info from config.properties file, 
-    // receives an int to choose the user to connect with
+    /**
+     * Constructs a new ConnectionOpenClose instance. It initializes the
+     * database connection parameters by reading them from the
+     * "config.properties" file.
+     */
     public ConnectionOpenClose() {
         configFile = ResourceBundle.getBundle("controller.Config");
         url = configFile.getString("URL");
@@ -27,7 +32,15 @@ class ConnectionOpenClose {
         pass = configFile.getString("PASSWORD");
     }
 
-    // Method that opens the connection with MySQL
+    /**
+     * Opens a database connection to the MySQL database using the connection
+     * parameters obtained from the "config.properties" file.
+     *
+     * @return A valid database connection if successful, or null if an error
+     * occurs.
+     * @throws SQLException If an SQL exception occurs during the connection
+     * process.
+     */
     public Connection openConnection() throws SQLException {
         Connection con = null;
         try {
@@ -39,7 +52,15 @@ class ConnectionOpenClose {
         return con;
     }
 
-    // Method that closes the connection with MySQL
+    /**
+     * Closes a database connection and a prepared statement if they are not
+     * null.
+     *
+     * @param stmt The prepared statement to close.
+     * @param con The database connection to close.
+     * @throws SQLException If an SQL exception occurs during the closing
+     * process.
+     */
     public void closeConnection(PreparedStatement stmt, Connection con) throws SQLException {
         if (stmt != null) {
             stmt.close();
