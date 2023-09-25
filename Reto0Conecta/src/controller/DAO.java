@@ -17,9 +17,9 @@ import model.UnidadDidactica;
  * @author alexs, iratig
  */
 public interface DAO {
-    public boolean crearUnidadDidactica(UnidadDidactica unidadDidactica);
+    public boolean crearUnidadDidactica(UnidadDidactica unidadDidactica) throws PersonalizedException;
    
-    public Integer crearEnunciado(Enunciado enunciado);
-    public List<Enunciado> listarEnunciados(String convocataria);
+    public Integer crearEnunciado(Enunciado enunciado) throws PersonalizedException;
+    public List<Enunciado> listarEnunciados(String convocataria) throws PersonalizedException;
     
 }

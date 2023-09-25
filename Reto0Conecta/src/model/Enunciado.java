@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents an exercise in an educational context. It
+ * This class represents an statement. It
  * contains information such as description, difficulty level, availability,
  * file path, and associated educational units.
  *
@@ -163,13 +163,12 @@ public class Enunciado {
         while (!correct) {
             System.out.println("Insert  the level (alta, media, baja): ");
             String nivelString = Util.introducirCadena();
-
-            // Convierte la cadena del nivel en un enum Dificultad
+            //Converts the string to an enum Dificultad
             try {
                 nivel = Dificultad.valueOf(nivelString.toLowerCase());
-                correct = true; // Marcar como correcto si la conversión tuvo éxito
+                correct = true; 
             } catch (IllegalArgumentException e) {
-                nivel = null; // O maneja el error de otra manera, como configurar nivel en null
+                nivel = null;
                 System.out.println("The level information is not valid. It has been set to null. Try again!");
             }
         }

@@ -45,7 +45,7 @@ public class DaoDBImplementation implements DAO {
      * @throws PersonalizedException If an error occurs during the database
      * operation or if the operation fails.
      */
-    public boolean crearUnidadDidactica(UnidadDidactica unidadDidactica) {
+    public boolean crearUnidadDidactica(UnidadDidactica unidadDidactica) throws PersonalizedException {
         boolean correct = false;
         final String INSERTUnidadDidactica = "INSERT INTO unidad (acronimo, titulo, evaluacion, descripcion) VALUES ( ?, ?, ?, ?)";
 
@@ -66,23 +66,24 @@ public class DaoDBImplementation implements DAO {
 
             connection.closeConnection(stmt, con);
         } catch (SQLException ex) {
-           // ADD
+            throw new PersonalizedException(ex.getMessage());
         }
 
         return correct;
 
     }
 
-    /**
+     /**
      * Creates a new enunciado in the database with the provided information and
      * associates it with educational units as specified.
      *
      * @param enunciado The enunciado to create.
-     * @return A ResultadoCreacionEnunciado object containing information about
-     * the creation process.
+     * @return a Integer with the id of the enunciado.
+     * @throws PersonalizedException If an error occurs during the database
+     * operation or if there is no education unit to insert.
      */
     @Override
-    public Integer crearEnunciado(Enunciado enunciado) {
+    public Integer crearEnunciado(Enunciado enunciado) throws PersonalizedException {
         //INCLUIR VALIDACIÓN --> CLASE QUE LO CONTROLE TODO
         Integer id = 0;
         List<Integer> idUnidades = new ArrayList<>();
@@ -113,8 +114,10 @@ public class DaoDBImplementation implements DAO {
             while (rs.next()) {
                 id = rs.getInt(1);
             }
+            // This check is to determine if the user has wanted to insert educational units
+            // Find the ID of the last inserted enunciado since the ID is auto-generated in the database
             if (enunciado.getUnidadesDidacticas().size() > 0) {
-                //BUSCAMOS EL ID TENIENDO EN CUENTA EL ACRÓNIMO LO TRAEMOS EN EL ARRAY PORQUE UN ENUNCIADO PUEDE ESTAR EN MÁS DE UNA UNIDAD DIDÁCTICA
+                //We look for the ID considering the acronym and bring it into the array because an enunciado can be in more than one educational unit.
                 stmt = con.prepareStatement(SelectidUnidades);
                 for (int i = 0; i < enunciado.getUnidadesDidacticas().size(); i++) {
                     stmt.setString(1, enunciado.getUnidadesDidacticas().get(i));
@@ -124,7 +127,7 @@ public class DaoDBImplementation implements DAO {
                     }
 
                 }
-
+                //This is to check if there are any idUnidades. Perhaps the user has inserted the wrong acronym.
                 if (idUnidades.size() > 0) {
 
                     //INSERTAR ESE ID DEL ENUNCIADO Y ES ID DE UNIDAD DIDÁCTICA
@@ -135,13 +138,15 @@ public class DaoDBImplementation implements DAO {
                         stmt.executeUpdate();
 
                     }
+                } else {
+                    throw new PersonalizedException("Not educational Unit found");
                 }
 
-            } 
+            }
             connection.closeConnection(stmt, con);
 
         } catch (SQLException ex) {
-            Logger.getLogger(DaoDBImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersonalizedException(ex.getMessage());
         }
         return id;
     }
@@ -149,75 +154,50 @@ public class DaoDBImplementation implements DAO {
     /**
      * Retrieves a list of enunciados associated with a specified convocatoria.
      *
-     * @param convocatoria The convocatoria to filter enunciados.
+     * @param checking The checking parameter (may be null).
      * @return A list of Enunciado objects associated with the specified
      * convocatoria.
+     * @throws PersonalizedException If an error occurs during the database
+     * operation or if the operation fails.
      */
     @Override
-    public List<Enunciado> listarEnunciados(String checking) {
-        final String SelectidUnidades = "SELECT id FROM unidad WHERE acronimo = ?";
-        final String SelectidEnunciado = "SELECT enunciados_id FROM unidad_enunciado WHERE unidads_id = ?";
-        final String SelectEnunciadoID = "Select * FROM enunciado where id = ?";
+    public List<Enunciado> listarEnunciados(String checking) throws PersonalizedException {
+        final String SelectEnunciadoID = "SELECT * FROM enunciado WHERE id IN (SELECT enunciados_id FROM unidad_enunciado WHERE unidads_id = (SELECT id FROM unidad WHERE acronimo = ?))";
         final String SelectEnunciado = "Select * FROM enunciado";
 
-        int idUnidad = 0;
-        List<Integer> idEnunciados = new ArrayList<>();
         List<Enunciado> enunciados = new ArrayList<>();
         Enunciado enunciado = new Enunciado();
         try {
             connection = new ConnectionOpenClose();
-            //AÑADIR SI LO QUEREMOS PARA EL MÉTODO DE LA CONVOCATORIA O SOLO DEVOLVER ENUNCIADO
             con = connection.openConnection();
+            //Check whether it is null or not, so this method can be used to search by Unidad Didáctica or just to obtain all the enunciados.
             if (checking != null) {
-                stmt = con.prepareStatement(SelectidUnidades);
-                stmt.setString(1, checking);
-
-                rs = stmt.executeQuery();
-
-                while (rs.next()) {
-                    idUnidad = rs.getInt("id");
-                }
-
-                stmt = con.prepareStatement(SelectidEnunciado);
-                stmt.setInt(1, idUnidad);
-
-                rs = stmt.executeQuery();
-                while (rs.next()) {
-                    idEnunciados.add(rs.getInt(1));
-                }
-
                 stmt = con.prepareStatement(SelectEnunciadoID);
-
-                for (int i = 0; i < idEnunciados.size(); i++) {
-                    stmt.setInt(1, idEnunciados.get(i));
-                    rs = stmt.executeQuery();
-                    while (rs.next()) {
-                        enunciado.setId(rs.getInt("id"));
-                        enunciado.setDescripcion(rs.getString("descripcion"));
-                        enunciado.setNivelString(rs.getString("nivel"));
-                        enunciado.setDisponible(rs.getInt("disponible"));
-                        enunciado.setRuta(rs.getString("ruta"));
-                        enunciados.add(enunciado);
-                    }
-                }
+                stmt.setString(1, checking);
             } else {
                 stmt = con.prepareStatement(SelectEnunciado);
-                rs = stmt.executeQuery();
-                while (rs.next()) {
-                    enunciado.setId(rs.getInt("id"));
-                    enunciado.setDescripcion(rs.getString("descripcion"));
-                    enunciado.setNivelString(rs.getString("nivel"));
-                    enunciado.setDisponible(rs.getInt("disponible"));
-                    enunciado.setRuta(rs.getString("ruta"));
-                    enunciados.add(enunciado);
-                }
+            }
+            rs = stmt.executeQuery();
+            //Obteins the resultset and creates enunciado
+            while (rs.next()) {
+                enunciado.setId(rs.getInt("id"));
+                enunciado.setDescripcion(rs.getString("descripcion"));
+                enunciado.setNivelString(rs.getString("nivel"));
+                enunciado.setDisponible(rs.getInt("disponible"));
+                enunciado.setRuta(rs.getString("ruta"));
+                enunciados.add(enunciado);
+
+            }
+            //If the user sends a educational unit that doesn't exits.
+            if (enunciados.isEmpty() && checking != null) {
+                throw new PersonalizedException("Educational Unit not found");
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(DaoDBImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersonalizedException(ex.getMessage());
         }
 
         return enunciados;
     }
-   
+
 }

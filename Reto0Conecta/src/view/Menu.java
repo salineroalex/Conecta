@@ -13,6 +13,8 @@ import controller.Util;
 import exceptions.PersonalizedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Enunciado;
 import model.ResultadoCreacionEnunciado;
 
@@ -53,8 +55,12 @@ public class Menu {
     public static void crearUnidad() {
         UnidadDidactica unidadDidactica = new UnidadDidactica();
         unidadDidactica.setDatos();
-        if (controlador.addUnidadDidactica(unidadDidactica)) {
-            System.out.println("UNIDAD DIDÁCTICA CREADA CORRECTAMENTE)");
+        try {
+            if (controlador.addUnidadDidactica(unidadDidactica)) {
+                System.out.println("Educational unit created succesfully");
+            }
+        } catch (PersonalizedException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -62,25 +68,38 @@ public class Menu {
     private static void crearEnunciado() {
         Enunciado enunciado = new Enunciado();
         enunciado.setDatos();
-        controlador.addEnunciado(enunciado);
+        try {
+            if (controlador.addEnunciado(enunciado) != null) {
+                System.out.println("Statement created successfully");
+            }
+        } catch (PersonalizedException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private static void listarEnunciado() {
         String unidadDidactica;
         System.out.println("Insert the educational unit: ");
         unidadDidactica = Util.introducirCadena();
-        List<Enunciado> enunciados = controlador.listarEnunciados(unidadDidactica);
-        for (Enunciado enunciado : enunciados) {
-            System.out.println("ID: " + enunciado.getId());
-            System.out.println("Descripción: " + enunciado.getDescripcion());
-            System.out.println("Nivel: " + enunciado.getNivelString());
-            if(enunciado.getDisponible()== 0){
-                System.out.println("Disponible: " + "YES ");
-            }else{
-                 System.out.println("Disponible: " + "NO");
-            }
-            System.out.println("Disponible: " + enunciado.getDisponible());
-            System.out.println("Ruta: " + enunciado.getRuta());
+        List<Enunciado> enunciados = null;
+        try {
+            enunciados = controlador.listarEnunciados(unidadDidactica);
+        } catch (PersonalizedException ex) {
+            System.err.println(ex.getMessage());
         }
+        if (enunciados != null) {
+            for (Enunciado enunciado : enunciados) {
+                System.out.println("ID: " + enunciado.getId());
+                System.out.println("Descripción: " + enunciado.getDescripcion());
+                System.out.println("Nivel: " + enunciado.getNivelString());
+                if (enunciado.getDisponible() == 0) {
+                    System.out.println("Disponible: " + "YES ");
+                } else {
+                    System.out.println("Disponible: " + "NO");
+                }
+                System.out.println("Ruta: " + enunciado.getRuta());
+            }
+        }
+
     }
 }

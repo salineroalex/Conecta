@@ -17,16 +17,16 @@ import model.UnidadDidactica;
  */
 public class Controller {
     private static DAO dao;
-    public boolean addUnidadDidactica(UnidadDidactica unidadDidactica){
+    public boolean addUnidadDidactica(UnidadDidactica unidadDidactica) throws PersonalizedException{
         dao = DaoFactory.getDB();
         return dao.crearUnidadDidactica(unidadDidactica);
     }
-    public Integer addEnunciado(Enunciado enunciado){
+    public Integer addEnunciado(Enunciado enunciado) throws PersonalizedException{
         dao = DaoFactory.getDB();
         return dao.crearEnunciado(enunciado);
         
     }
-     public List<Enunciado> listarEnunciados(String checking ){
+     public List<Enunciado> listarEnunciados(String checking ) throws PersonalizedException{
          dao = DaoFactory.getDB();
          return dao.listarEnunciados(checking);
      }
