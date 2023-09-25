@@ -13,7 +13,7 @@ import java.time.format.DateTimeParseException;
 
 /**
  *
- * @author alexs
+ * @author alexs, iratig
  */
 public class Tool {
 
@@ -46,6 +46,24 @@ public class Tool {
             }
         }
         return cont;
+    }
+
+    public static LocalDate leerFechaDMA() {
+        boolean error;
+        LocalDate date = null;
+        String dateString;
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        do {
+            error = false;
+            dateString = introducirCadena();
+            try {
+                date = LocalDate.parse(dateString, formateador);
+            } catch (DateTimeParseException e) {
+                System.out.println("Error, introduce una fecha en formato dd/mm/aaaa ");
+                error = true;
+            }
+        } while (error);
+        return date;
     }
 
     public static int leerInt() {

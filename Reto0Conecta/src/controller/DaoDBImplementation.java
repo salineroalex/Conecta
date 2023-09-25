@@ -17,4 +17,9 @@ public class DaoDBImplementation implements DAO{
     public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) {
         return null;
     }
+
+    @Override
+    public ConvocatoriaExamen searchConvocatoria(String id) {
+        return null;
+    }
 }
