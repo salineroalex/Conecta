@@ -48,17 +48,17 @@ public interface DAO {
      * @param convocatoria Receives parameter convocatoria of Object type ConvocatoriaExamen and stores its values persistently.
      * @return             Returns boolean to check if execution was correct.
      */
-    public boolean newConvocatoria(ConvocatoriaExamen convocatoria);
+    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) throws PersonalizedException;
     /**
      * Searches for a convocatoria object with the received enunciado ID assigned to it.
      * @param idEnunciado Receives de ID of an enunciado object to search a convocatoria.
      * @return            Returns the convocatoria found.
      */
-    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado);
+    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) throws PersonalizedException;
     /**
      * Searches a convocatoria by its ID.
      * @param id Receives parameter ID to search the convocatoria with the same ID.
      * @return   Returns the convocatoria found.
      */
-    public ConvocatoriaExamen searchConvocatoria(String id);
+    public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException;
 }

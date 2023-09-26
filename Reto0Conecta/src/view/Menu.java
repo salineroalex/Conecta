@@ -15,13 +15,14 @@ import model.Enunciado;
 import model.ResultadoCreacionEnunciado;
 
 import controller.Tool;
-import java.awt.List;
+
 import model.ConvocatoriaExamen;
 import model.Enunciado;
 
-
 /**
- * Console view implementation. Shows a menu and lets the user choose an option to execute.
+ * Console view implementation. Shows a menu and lets the user choose an option
+ * to execute.
+ *
  * @author alexs, iratig
  */
 public class Menu {
@@ -60,16 +61,16 @@ public class Menu {
             }
         } while (choice != 6);
     }
-    
+
     // 1
     /**
-     * 
-     * @param controller 
+     *
+     * @param controller
      */
     private void createUDConvocatoria(Controller controller) {
         UnidadDidactica unidadDidactica = new UnidadDidactica();
         ConvocatoriaExamen convocatoria = new ConvocatoriaExamen();
-        
+
         //Space for new UD
         unidadDidactica.setDatos();
         try {
@@ -77,14 +78,19 @@ public class Menu {
                 System.out.println("Educational unit created succesfully");
             }
         } catch (PersonalizedException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
         //Space for new convocatoria
         convocatoria.setDatos();
-        if(!controller.newConvocatoria(convocatoria)){
-            System.out.println("Something went wrong while writing to the file, please try again.");
+        try {
+            if (!controller.newConvocatoria(convocatoria)) {
+                System.out.println("Something went wrong while writing to the file, please try again.");
+            }
+        } catch (PersonalizedException ex) {
+            System.err.println(ex.getMessage());
         }
     }
+
     // 2
     /**
      * Creates a new Enunciado by collecting data from the user and adding it to
@@ -95,13 +101,14 @@ public class Menu {
         Enunciado enunciado = new Enunciado();
         enunciado.setDatos();
         try {
-            if (controlador.addEnunciado(enunciado) != null) {
+            if (controller.addEnunciado(enunciado) != null) {
                 System.out.println("Statement created successfully");
             }
         } catch (PersonalizedException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
     // 3
     /**
      * Lists Enunciado objects associated with a specified educational unit
@@ -113,7 +120,7 @@ public class Menu {
         unidadDidactica = Util.introducirCadena();
         List<Enunciado> enunciados = null;
         try {
-            enunciados = controlador.listarEnunciados(unidadDidactica);
+            enunciados = controller.listarEnunciados(unidadDidactica);
         } catch (PersonalizedException ex) {
             System.err.println(ex.getMessage());
         }
@@ -132,66 +139,91 @@ public class Menu {
         }
 
     }
-    }
+
     // 4
     /**
-     * Asks user for an enunciado ID, then prints the information about the convocatoria associated to the enunciado ID.
+     * Asks user for an enunciado ID, then prints the information about the
+     * convocatoria associated to the enunciado ID.
+     *
      * @param controller Received parameter to connect with class Controller.
      */
     private void viewConvocatoria(Controller controller) {
-       List<Enunciado> enunciados = controller.listarEnunciados(null);
-       ConvocatoriaExamen convocatoria = new ConvocatoriaExamen();
-       Integer idEnunciado;
-       Boolean flag = false;
-        
-        for(Enunciado enunciado:enunciados){
+        List<Enunciado> enunciados = new ArrayList<>();
+        try {
+            enunciados = controller.listarEnunciados(null);
+        } catch (PersonalizedException ex) {
+            System.err.println(ex.getMessage());
+        }
+        ConvocatoriaExamen convocatoria = new ConvocatoriaExamen();
+        Integer idEnunciado;
+        Boolean flag = false;
+
+        for (Enunciado enunciado : enunciados) {
             System.out.println(enunciado.getId());
         }
         System.out.println("Enter the ID of the enunciado used in the convocatoria oyu want to find:");
         idEnunciado = Tool.leerInt();
-        for(int i = 0; i < enunciados.length() && flag = false; i++){
-            if(enunciados.get(i).getId().equals(idEnunciado)){
+        for (int i = 0; i < enunciados.size(); i++) {
+            if (enunciados.get(i).getId().equals(idEnunciado)) {
+                i = enunciados.size();
                 flag = true;
-            } 
+            }
         }
-        if(!flag){
+        if (!flag) {
             System.out.println("Enunciado not found, please try again with another.");
-        } else{
-            convocatoria = controller.searchConvocatoria(idEnunciado);
-            if(convocatoria == null){
+        } else {
+            try {
+                convocatoria = controller.searchConvocatoria(idEnunciado);
+            } catch (PersonalizedException ex) {
+                System.err.println(ex.getMessage());
+            }
+            if (convocatoria == null) {
                 System.out.println("Convocatoria not found, please try again.");
-            } else{
+            } else {
                 convocatoria.getDatos();
             }
         }
     }
+
     // 5
     /**
-     * Lists all enunciados, asks user for enunciado ID, searches for the path to the document in the enunciado object and opens the document.
+     * Lists all enunciados, asks user for enunciado ID, searches for the path
+     * to the document in the enunciado object and opens the document.
+     *
      * @param controller Received parameter to connect with class Controller.
      */
     public void viewDocument(Controller controller) {
         Integer idEnunciado;
         Boolean flag = false;
         String path = null;
-        List<Enunciado> enunciados = controller.listarEnunciados(null);
-        
-        for(Enunciado enunciado:enunciados){
+        List<Enunciado> enunciados = new ArrayList<>();
+        try {
+            enunciados = controller.listarEnunciados(null);
+        } catch (PersonalizedException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        for (Enunciado enunciado : enunciados) {
             System.out.println(enunciado.getId() + "\n");
         }
         System.out.println("Enter the ID of the enunciado associated with the file you want to find:");
         idEnunciado = Tool.leerInt();
-        for(int i = 0; i < enunciados.length() && flag = false; i++){
-            if(enunciados.get(i).getId().equals(idEnunciado)){
-                path = enunciados.get(i).getPath();
+        for (int i = 0; i < enunciados.size(); i++) {
+            if (enunciados.get(i).getId().equals(idEnunciado)) {
+                path = enunciados.get(i).getRuta();
+                i = enunciados.size();
                 flag = true;
-            } 
+            }
         }
-        if(!flag){
+        if (!flag) {
             System.out.println("Enunciado not found, please try again with another.");
         }
-        if (path != null && !controller.openDocument(path)) {
-            System.out.println("\nFile not found, make sure the enunciado assigned to the file you are searching is correct.\n");
+        try {
+            if (path != null && !controller.openDocument(path)) {
+                System.out.println("\nFile not found, make sure the enunciado assigned to the file you are searching is correct.\n");
+            }
+        } catch (PersonalizedException ex) {
+            System.err.println(ex.getMessage());
         }
     }
 }

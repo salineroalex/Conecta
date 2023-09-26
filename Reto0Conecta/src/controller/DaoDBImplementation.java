@@ -197,17 +197,17 @@ public class DaoDBImplementation implements DAO {
     }
 
     @Override
-    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) {
+    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) throws PersonalizedException{
         return false;
     }
 
     @Override
-    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) {
+    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) throws PersonalizedException{
         return null;
     }
 
     @Override
-    public ConvocatoriaExamen searchConvocatoria(String id) {
+    public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException{
         return null;
     }
 

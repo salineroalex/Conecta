@@ -1,7 +1,11 @@
 package controller;
 
 import exceptions.PersonalizedException;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import model.ConvocatoriaExamen;
 import model.Enunciado;
 import model.ResultadoCreacionEnunciado;
 import model.UnidadDidactica;
@@ -58,7 +62,7 @@ public class Controller {
      * @param convocatoria Received object to write into file.
      * @return             Return boolean to check if the execution was correct.
      */
-    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) {
+    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) throws PersonalizedException{
         dao = DaoFactory.getFile();
         return dao.newConvocatoria(convocatoria);
     }
@@ -68,7 +72,7 @@ public class Controller {
      * @param idEnunciado Received Integer parameter to search for a specific convocatoria containing that parameter.
      * @return            Return the convocatoria it searched for.
      */
-    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) {
+    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) throws PersonalizedException{
         dao = DaoFactory.getFile();
         return dao.searchConvocatoria(idEnunciado);
     }
@@ -78,7 +82,7 @@ public class Controller {
      * @param id Received String parameter to search for a convocatoria by its own ID.
      * @return   Returns the convocatoria found.
      */
-    public ConvocatoriaExamen searchConvocatoria(String id) {
+    public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException{
         dao = DaoFactory.getFile();
         return dao.searchConvocatoria(id);
     }
@@ -88,7 +92,7 @@ public class Controller {
      * @param path Receives a String parameter to use to open the file in that path.
      * @return     Returns boolean to check if execution was correct.
      */
-    public Boolean openDocument(String path) {
+    public Boolean openDocument(String path) throws PersonalizedException{
         Boolean okay;
         File file = new File(path);
         
