@@ -1,11 +1,24 @@
 package view;
 
 import controller.Controller;
+
+import controller.DAO;
+import controller.DaoDBImplementation;
+import model.UnidadDidactica;
+import controller.Util;
+import exceptions.PersonalizedException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Enunciado;
+import model.ResultadoCreacionEnunciado;
+
 import controller.Tool;
 import java.awt.List;
 import model.ConvocatoriaExamen;
 import model.Enunciado;
-import model.UnidadDidactica;
+
 
 /**
  * Console view implementation. Shows a menu and lets the user choose an option to execute.
@@ -58,7 +71,14 @@ public class Menu {
         ConvocatoriaExamen convocatoria = new ConvocatoriaExamen();
         
         //Space for new UD
-        
+        unidadDidactica.setDatos();
+        try {
+            if (controller.addUnidadDidactica(unidadDidactica)) {
+                System.out.println("Educational unit created succesfully");
+            }
+        } catch (PersonalizedException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //Space for new convocatoria
         convocatoria.setDatos();
         if(!controller.newConvocatoria(convocatoria)){
@@ -66,12 +86,52 @@ public class Menu {
         }
     }
     // 2
+    /**
+     * Creates a new Enunciado by collecting data from the user and adding it to
+     * the database using the Controller. Prints a success message upon
+     * successful creation.
+     */
     private void createEnunciado(Controller controller) {
-        
+        Enunciado enunciado = new Enunciado();
+        enunciado.setDatos();
+        try {
+            if (controlador.addEnunciado(enunciado) != null) {
+                System.out.println("Statement created successfully");
+            }
+        } catch (PersonalizedException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
     // 3
+    /**
+     * Lists Enunciado objects associated with a specified educational unit
+     * provided by the user. Prints the details of each Enunciado if available.
+     */
     private void viewEnunciadoByUD(Controller controller) {
-        
+        String unidadDidactica;
+        System.out.println("Insert the educational unit: ");
+        unidadDidactica = Util.introducirCadena();
+        List<Enunciado> enunciados = null;
+        try {
+            enunciados = controlador.listarEnunciados(unidadDidactica);
+        } catch (PersonalizedException ex) {
+            System.err.println(ex.getMessage());
+        }
+        if (enunciados != null) {
+            for (Enunciado enunciado : enunciados) {
+                System.out.println("ID: " + enunciado.getId());
+                System.out.println("Descripción: " + enunciado.getDescripcion());
+                System.out.println("Nivel: " + enunciado.getNivelString());
+                if (enunciado.getDisponible() == 0) {
+                    System.out.println("Disponible: " + "YES ");
+                } else {
+                    System.out.println("Disponible: " + "NO");
+                }
+                System.out.println("Ruta: " + enunciado.getRuta());
+            }
+        }
+
+    }
     }
     // 4
     /**
