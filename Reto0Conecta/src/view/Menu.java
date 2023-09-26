@@ -98,15 +98,28 @@ public class Menu {
      * successful creation.
      */
     private void createEnunciado(Controller controller) {
+        Integer idEnunciado = null;
+        
+        
         Enunciado enunciado = new Enunciado();
         enunciado.setDatos();
         try {
-            if (controller.addEnunciado(enunciado) != null) {
-                System.out.println("Statement created successfully");
+            idEnunciado = controller.addEnunciado(enunciado);
+            if (idEnunciado != null) {
+                System.out.println("Statement created successfully.");
             }
         } catch (PersonalizedException ex) {
             System.out.println(ex.getMessage());
         }
+        System.out.println("Enter the name of the convocatoria you want to assign this enunciado to:");
+        try {
+            if(!controller.editConvocatoria(Tool.introducirCadena(), idEnunciado)){
+                System.out.println("Could not find convocatoria or could not add enunciado to the convocatoria.");
+            }
+        } catch (PersonalizedException ex) {
+            System.out.println("Error while writing to the file.");
+        }
+        
     }
 
     // 3

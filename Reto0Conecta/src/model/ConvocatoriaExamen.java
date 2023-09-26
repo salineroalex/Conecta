@@ -75,7 +75,7 @@ public class ConvocatoriaExamen implements Serializable{
         fecha = Tool.leerFechaDMA();
         System.out.println("¿Para qué curso es ésta convocatoria?");
         curso = Tool.introducirCadena();
-        
+        idEnunciado = null;
     }
     
     public void getDatos(){

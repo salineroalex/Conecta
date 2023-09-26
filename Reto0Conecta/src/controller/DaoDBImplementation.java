@@ -211,4 +211,9 @@ public class DaoDBImplementation implements DAO {
         return null;
     }
 
+    @Override
+    public boolean editConvocatoria(String id, Integer idEnunciado) throws PersonalizedException {
+        return false;
+    }
+
 }

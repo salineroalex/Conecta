@@ -61,4 +61,13 @@ public interface DAO {
      * @return   Returns the convocatoria found.
      */
     public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException;
+    
+    /**
+     * Gets the id of the enunciado and convocatoria and assignes the enunciado to the convocatoria.
+     * @param id            The id of the convocatoria.
+     * @param idEnunciado   The id of the enunciado.
+     * @return              Returns true if executed correctly.
+     * @throws PersonalizedException 
+     */
+    public boolean editConvocatoria (String id, Integer idEnunciado) throws PersonalizedException;
 }
