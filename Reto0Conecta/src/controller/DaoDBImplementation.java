@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.sql.Connection;
@@ -19,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ResultadoCreacionEnunciado;
+
 
 /**
  * This class represents the implementation of a Data Access Object (DAO) for
@@ -198,6 +194,21 @@ public class DaoDBImplementation implements DAO {
         }
 
         return enunciados;
+    }
+
+    @Override
+    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) {
+        return false;
+    }
+
+    @Override
+    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) {
+        return null;
+    }
+
+    @Override
+    public ConvocatoriaExamen searchConvocatoria(String id) {
+        return null;
     }
 
 }
