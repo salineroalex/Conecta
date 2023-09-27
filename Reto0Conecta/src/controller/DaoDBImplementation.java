@@ -80,7 +80,6 @@ public class DaoDBImplementation implements DAO {
      */
     @Override
     public Integer crearEnunciado(Enunciado enunciado) throws PersonalizedException {
-        //INCLUIR VALIDACIÓN --> CLASE QUE LO CONTROLE TODO
         Integer id = 0;
         List<Integer> idUnidades = new ArrayList<>();
 
@@ -162,7 +161,6 @@ public class DaoDBImplementation implements DAO {
         final String SelectEnunciado = "Select * FROM enunciado";
 
         List<Enunciado> enunciados = new ArrayList<>();
-        Enunciado enunciado = new Enunciado();
         try {
             connection = new ConnectionOpenClose();
             con = connection.openConnection();
@@ -176,6 +174,7 @@ public class DaoDBImplementation implements DAO {
             rs = stmt.executeQuery();
             //Obteins the resultset and creates enunciado
             while (rs.next()) {
+                Enunciado enunciado = new Enunciado();
                 enunciado.setId(rs.getInt("id"));
                 enunciado.setDescripcion(rs.getString("descripcion"));
                 enunciado.setNivelString(rs.getString("nivel"));
