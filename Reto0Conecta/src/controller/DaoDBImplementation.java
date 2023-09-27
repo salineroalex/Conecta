@@ -6,15 +6,10 @@ import java.util.List;
 import model.ConvocatoriaExamen;
 import model.Enunciado;
 import model.UnidadDidactica;
-import controller.ConnectionOpenClose;
 import exceptions.PersonalizedException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.ResultadoCreacionEnunciado;
-
 
 /**
  * This class represents the implementation of a Data Access Object (DAO) for
@@ -69,7 +64,7 @@ public class DaoDBImplementation implements DAO {
 
     }
 
-     /**
+    /**
      * Creates a new enunciado in the database with the provided information and
      * associates it with educational units as specified.
      *
@@ -162,7 +157,6 @@ public class DaoDBImplementation implements DAO {
         final String SelectEnunciado = "Select * FROM enunciado";
 
         List<Enunciado> enunciados = new ArrayList<>();
-        Enunciado enunciado = new Enunciado();
         try {
             connection = new ConnectionOpenClose();
             con = connection.openConnection();
@@ -176,6 +170,7 @@ public class DaoDBImplementation implements DAO {
             rs = stmt.executeQuery();
             //Obteins the resultset and creates enunciado
             while (rs.next()) {
+                Enunciado enunciado = new Enunciado();
                 enunciado.setId(rs.getInt("id"));
                 enunciado.setDescripcion(rs.getString("descripcion"));
                 enunciado.setNivelString(rs.getString("nivel"));
@@ -197,17 +192,17 @@ public class DaoDBImplementation implements DAO {
     }
 
     @Override
-    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) throws PersonalizedException{
+    public boolean newConvocatoria(ConvocatoriaExamen convocatoria) throws PersonalizedException {
         return false;
     }
 
     @Override
-    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) throws PersonalizedException{
+    public ConvocatoriaExamen searchConvocatoria(Integer idEnunciado) throws PersonalizedException {
         return null;
     }
 
     @Override
-    public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException{
+    public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException {
         return null;
     }
 

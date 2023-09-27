@@ -4,7 +4,6 @@ import exceptions.PersonalizedException;
 import java.util.List;
 import model.ConvocatoriaExamen;
 import model.Enunciado;
-import model.ResultadoCreacionEnunciado;
 import model.UnidadDidactica;
 
 /**

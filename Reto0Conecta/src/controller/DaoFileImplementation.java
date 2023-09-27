@@ -8,10 +8,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import model.ConvocatoriaExamen;
 import model.Enunciado;
 import model.UnidadDidactica;
+import utiles.Util;
 
 /**
  * Implementation of DAO interface for file output and input.
@@ -37,7 +39,11 @@ public class DaoFileImplementation implements DAO {
         Boolean okay = false;
         if (convocatoriaFile.exists()) {
             try {
-                oos = new MyObjectOutputStream(new FileOutputStream(convocatoriaFile, true));
+                if(Util.calculoFichero(convocatoriaFile) > 0){
+                    oos = new MyObjectOutputStream(new FileOutputStream(convocatoriaFile, true));
+                }else{
+                    oos = new ObjectOutputStream(new FileOutputStream(convocatoriaFile));
+                }   
                 okay = true;
             } catch (FileNotFoundException ex) {
                 okay = false;
@@ -48,8 +54,8 @@ public class DaoFileImplementation implements DAO {
             }
         } else {
             try {
-                okay = true;
                 oos = new ObjectOutputStream(new FileOutputStream(convocatoriaFile));
+                okay = true;
             } catch (FileNotFoundException ex) {
                 okay = false;
                 throw new PersonalizedException("File Not Found!!");
@@ -90,7 +96,7 @@ public class DaoFileImplementation implements DAO {
         Boolean found = false;
 
         if (convocatoriaFile.exists()) {
-            length = Tool.calculoFichero(convocatoriaFile);
+            length = Util.calculoFichero(convocatoriaFile);
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(convocatoriaFile));
                 for (int i = 0; i < length && !found; i++) {
@@ -117,7 +123,7 @@ public class DaoFileImplementation implements DAO {
      * @param id Receives a String used to search for the convocatoria of the
      * same ID attribute.
      * @return The return value is the object convocatoria found.
-     * @throws exceptions.PersonalizedException
+     * @throws PersonalizedException
      */
     public ConvocatoriaExamen searchConvocatoria(String id) throws PersonalizedException {
         ConvocatoriaExamen convocatoria = null;
@@ -126,7 +132,7 @@ public class DaoFileImplementation implements DAO {
         Boolean found = false;
 
         if (convocatoriaFile.exists()) {
-            length = Tool.calculoFichero(convocatoriaFile);
+            length = Util.calculoFichero(convocatoriaFile);
 
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(convocatoriaFile));
@@ -148,51 +154,35 @@ public class DaoFileImplementation implements DAO {
     }
 
     /**
-     * Gets the id of the enunciado and convocatoria and assignes the enunciado to the convocatoria.
-     * @param id            The id of the convocatoria.
-     * @param idEnunciado   The id of the enunciado.
-     * @return              Returns true if executed correctly.
+     * Gets the id of the enunciado and convocatoria and assignes the enunciado
+     * to the convocatoria.
+     *
+     * @param id The id of the convocatoria.
+     * @param idEnunciado The id of the enunciado.
+     * @return Returns true if executed correctly.
      * @throws PersonalizedException
      */
     @Override
     public boolean editConvocatoria(String id, Integer idEnunciado) throws PersonalizedException {
         Boolean okay = false;
         ObjectOutputStream oos = null;
+        Integer fileLength;
+        List<ConvocatoriaExamen> convocatorias = new ArrayList<>();
         ConvocatoriaExamen convocatoria = null;
 
-        convocatoria = searchConvocatoria(id);
-        if (convocatoria != null) {
-            convocatoria.setIdEnunciado(idEnunciado);
-            if (convocatoriaFile.exists()) {
-                try {
-                    oos = new MyObjectOutputStream(new FileOutputStream(convocatoriaFile, true));
+        if (convocatoriaFile.exists()) {
+            convocatorias = Util.volcadoFicheroArrayList(convocatoriaFile, convocatorias);
+            for(int i = 0; i < convocatorias.size(); i++){
+                if(convocatorias.get(i).getConvocatoria().equalsIgnoreCase(id)){
+                    convocatorias.get(i).setIdEnunciado(idEnunciado);
+                    i = convocatorias.size();
                     okay = true;
-                } catch (FileNotFoundException ex) {
-                    okay = false;
-                    throw new PersonalizedException("File Not Found!!");
-                } catch (IOException ex) {
-                    okay = false;
-                    throw new PersonalizedException("Error in File input!!");
                 }
-            } else {
-                throw new PersonalizedException("Error. File Not Found!");
             }
-            try {
-                oos.writeObject(convocatoria);
-            } catch (IOException ex) {
-                okay = false;
-                throw new PersonalizedException("Error in File input!!");
-            }
-            try {
-                oos.close();
-            } catch (IOException ex) {
-                okay = false;
-                throw new PersonalizedException("Error colsing output stream!!");
-            }
+            Util.volcadoArrayListAFichero(convocatorias, convocatoriaFile);
         } else {
-            throw new PersonalizedException("Error. Convocatoria not found!");
+            throw new PersonalizedException("Error. File Not Found!");
         }
-
         return okay;
     }
 

@@ -2,20 +2,11 @@ package view;
 
 import controller.Controller;
 
-import controller.DAO;
-import controller.DaoDBImplementation;
 import model.UnidadDidactica;
-import controller.Util;
+import utiles.Util;
 import exceptions.PersonalizedException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Enunciado;
-import model.ResultadoCreacionEnunciado;
-
-import controller.Tool;
-
 import model.ConvocatoriaExamen;
 import model.Enunciado;
 
@@ -38,7 +29,7 @@ public class Menu {
                     + "\n4. Consultar en qué convocatorias se ha utilizado un enunciado concreto."
                     + "\n5. Visualizar el documento de texto asociado a un enunciado."
                     + "\n6. Salir");
-            choice = Tool.leerInt();
+            choice = Util.leerInt();
             switch (choice) {
                 case 1:
                     createUDConvocatoria(controller);
@@ -113,7 +104,7 @@ public class Menu {
         }
         System.out.println("Enter the name of the convocatoria you want to assign this enunciado to:");
         try {
-            if(!controller.editConvocatoria(Tool.introducirCadena(), idEnunciado)){
+            if(!controller.editConvocatoria(Util.introducirCadena(), idEnunciado)){
                 System.out.println("Could not find convocatoria or could not add enunciado to the convocatoria.");
             }
         } catch (PersonalizedException ex) {
@@ -174,8 +165,8 @@ public class Menu {
         for (Enunciado enunciado : enunciados) {
             System.out.println(enunciado.getId());
         }
-        System.out.println("Enter the ID of the enunciado used in the convocatoria oyu want to find:");
-        idEnunciado = Tool.leerInt();
+        System.out.println("Enter the ID of the enunciado used in the convocatoria you want to find:");
+        idEnunciado = Util.leerInt();
         for (int i = 0; i < enunciados.size(); i++) {
             if (enunciados.get(i).getId().equals(idEnunciado)) {
                 i = enunciados.size();
@@ -220,7 +211,7 @@ public class Menu {
             System.out.println(enunciado.getId() + "\n");
         }
         System.out.println("Enter the ID of the enunciado associated with the file you want to find:");
-        idEnunciado = Tool.leerInt();
+        idEnunciado = Util.leerInt();
         for (int i = 0; i < enunciados.size(); i++) {
             if (enunciados.get(i).getId().equals(idEnunciado)) {
                 path = enunciados.get(i).getRuta();

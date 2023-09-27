@@ -1,6 +1,6 @@
 package model;
 
-import controller.Util;
+import utiles.Util;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,7 +192,7 @@ public class Enunciado {
         while (!correct) {
             System.out.println("Insert the path of the doc : ");
             ruta = Util.introducirCadena();
-            if (!ruta.isEmpty() && ruta.matches("[a-zA-Z0-9:/\\\\]+\\.doc")) {
+            if (!ruta.isEmpty() && ruta.matches("[a-zA-Z0-9:/\\\\\\s]+\\.docx?")) {
                 correct = true;
             } else {
                 System.out.println("The information is not in the correct format. Try again!");

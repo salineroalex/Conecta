@@ -1,8 +1,8 @@
 package model;
 
-import controller.Tool;
 import java.io.Serializable;
 import java.time.LocalDate;
+import utiles.Util;
 
 /**
  * This is the convocatoria class.
@@ -68,13 +68,13 @@ public class ConvocatoriaExamen implements Serializable{
     }
     public void setDatos(){
         System.out.println("Introduce el nombre de la convocatoria:");
-        convocatoria = Tool.introducirCadena();
+        convocatoria = Util.introducirCadena();
         System.out.println("Escribe una breve descripción de la convocatoria.");
-        descripcion = Tool.introducirCadena();
+        descripcion = Util.introducirCadena();
         System.out.println("¿En qué fecha está programada ésta convocatoria? (dia/mes/año)");
-        fecha = Tool.leerFechaDMA();
+        fecha = Util.leerFechaDMA();
         System.out.println("¿Para qué curso es ésta convocatoria?");
-        curso = Tool.introducirCadena();
+        curso = Util.introducirCadena();
         idEnunciado = null;
     }
     

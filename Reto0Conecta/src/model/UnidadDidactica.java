@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import controller.Util;
+import utiles.Util;
 
 /**
  * Represents an educational unit.
