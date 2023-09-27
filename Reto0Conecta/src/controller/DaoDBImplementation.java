@@ -73,7 +73,7 @@ public class DaoDBImplementation implements DAO {
 
     }
 
-     /**
+    /**
      * Creates a new enunciado in the database with the provided information and
      * associates it with educational units as specified.
      *
@@ -166,7 +166,7 @@ public class DaoDBImplementation implements DAO {
         final String SelectEnunciado = "Select * FROM enunciado";
 
         List<Enunciado> enunciados = new ArrayList<>();
-        Enunciado enunciado = new Enunciado();
+
         try {
             connection = new ConnectionOpenClose();
             con = connection.openConnection();
@@ -180,6 +180,7 @@ public class DaoDBImplementation implements DAO {
             rs = stmt.executeQuery();
             //Obteins the resultset and creates enunciado
             while (rs.next()) {
+                Enunciado enunciado = new Enunciado();
                 enunciado.setId(rs.getInt("id"));
                 enunciado.setDescripcion(rs.getString("descripcion"));
                 enunciado.setNivelString(rs.getString("nivel"));
