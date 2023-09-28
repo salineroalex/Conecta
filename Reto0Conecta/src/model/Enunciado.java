@@ -150,15 +150,15 @@ public class Enunciado {
         String unidadString;
         boolean correct = false;
 
-        while (!correct) {
+        //while (!correct) {
             System.out.println("Insert a description: ");
             descripcion = Util.introducirCadena();
-            if (!descripcion.isEmpty() && descripcion.matches("[a-zA-Z]+")) {
+            /*if (!descripcion.isEmpty() && descripcion.matches("[a-zA-Z]+")) {
                 correct = true;
             } else {
                 System.out.println("The information is not in the correct format. Try again!");
             }
-        }
+        }*/
         correct = false;
         while (!correct) {
             System.out.println("Insert  the level (alta, media, baja): ");
@@ -192,7 +192,7 @@ public class Enunciado {
         while (!correct) {
             System.out.println("Insert the path of the doc : ");
             ruta = Util.introducirCadena();
-            if (!ruta.isEmpty() && ruta.matches("[a-zA-Z0-9:/\\\\\\s]+\\.docx?")) {
+            if (!ruta.isEmpty() && ruta.matches(".+\\.(doc|docx)")) {
                 correct = true;
             } else {
                 System.out.println("The information is not in the correct format. Try again!");
