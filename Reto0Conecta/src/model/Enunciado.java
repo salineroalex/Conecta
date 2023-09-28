@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents an statement. It
- * contains information such as description, difficulty level, availability,
- * file path, and associated educational units.
+ * This class represents an statement. It contains information such as
+ * description, difficulty level, availability, file path, and associated
+ * educational units.
  *
  * This class also includes a method, setDatos(), that prompts the user to enter
- * information for the exercise with validation to ensure that the data
- * entered is in the correct format.
- * 
+ * information for the exercise with validation to ensure that the data entered
+ * is in the correct format.
+ *
  * @author Irati Garzón
  */
 public class Enunciado {
@@ -166,7 +166,7 @@ public class Enunciado {
             //Converts the string to an enum Dificultad
             try {
                 nivel = Dificultad.valueOf(nivelString.toLowerCase());
-                correct = true; 
+                correct = true;
             } catch (IllegalArgumentException e) {
                 nivel = null;
                 System.out.println("The level information is not valid. It has been set to null. Try again!");
@@ -201,30 +201,25 @@ public class Enunciado {
         correct = false;
         System.out.println("Do you want to introduce an Educational Unit?: (YES OR NO)");
         opcion = Util.introducirCadena();
-        while (!correct) {
-            if (opcion.equalsIgnoreCase("YES") || opcion.equalsIgnoreCase("NO")) {
-                correct = true;
-                do {
-                    System.out.println("Insert the acronym of an Educational Unit ");
-                    unidadString = Util.introducirCadena();
-                    unidadesDidacticas.add(unidadString);
-                    boolean correct2 = false;
-                    while(!correct2){
-                        System.out.println("Do you want to insert more educational units? : (YES OR NO)");
-                        opcion = Util.introducirCadena();
-                        if(opcion.equalsIgnoreCase("yes") || opcion.equalsIgnoreCase("no") ){
-                            correct2 = true;
-                        }else{
-                             System.out.println("The information is not in the correct format. Try again!");
-                        }
+        if (opcion.equalsIgnoreCase("YES")) {
+            do {
+                System.out.println("Insert the acronym of an Educational Unit ");
+                unidadString = Util.introducirCadena();
+                unidadesDidacticas.add(unidadString);
+                while (!correct) {
+                    System.out.println("Do you want to insert more educational units? : (YES OR NO)");
+                    opcion = Util.introducirCadena();
+                    if (opcion.equalsIgnoreCase("yes") || opcion.equalsIgnoreCase("no")) {
+                        correct = true;
+                    } else {
+                        System.out.println("The information is not in the correct format. Try again!");
                     }
-                    correct2 = false;
-                } while (opcion.equalsIgnoreCase("Please, write YES or NO"));
-            }else{
-                System.out.println("Please, write YES or NO");
-            }
+                }
+                correct = false;
+            } while (opcion.equalsIgnoreCase("yes"));
+
         }
 
     }
-   
+
 }

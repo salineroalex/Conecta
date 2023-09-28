@@ -82,6 +82,7 @@ public class DaoDBImplementation implements DAO {
         final String INSERTnunciado = "INSERT INTO enunciado (descripcion, nivel, disponible, ruta) VALUES (?, ?, ?, ?)";
         final String SELECTid = "SELECT MAX(id) FROM enunciado";
         final String SelectidUnidades = "SELECT id FROM unidad WHERE acronimo = ?";
+        final String SELECT_EXISTING_ACRONYM = "SELECT COUNT(*) FROM unidad WHERE acronimo = ?";
         final String INSERTUnidad_Enunciado = "INSERT INTO unidad_enunciado(unidads_id, enunciados_id) VALUES(?,?)";
         try {
             connection = new ConnectionOpenClose();
@@ -153,7 +154,7 @@ public class DaoDBImplementation implements DAO {
      */
     @Override
     public List<Enunciado> listarEnunciados(String checking) throws PersonalizedException {
-        final String SelectEnunciadoID = "SELECT * FROM enunciado WHERE id IN (SELECT enunciados_id FROM unidad_enunciado WHERE unidads_id = (SELECT id FROM unidad WHERE acronimo = ?))";
+        final String SelectEnunciadoId= "SELECT * FROM enunciado WHERE id IN (SELECT enunciados_id FROM unidad_enunciado WHERE unidads_id IN (SELECT id FROM unidad WHERE acronimo = ?))";
         final String SelectEnunciado = "Select * FROM enunciado";
 
         List<Enunciado> enunciados = new ArrayList<>();
@@ -162,7 +163,7 @@ public class DaoDBImplementation implements DAO {
             con = connection.openConnection();
             //Check whether it is null or not, so this method can be used to search by Unidad Didáctica or just to obtain all the enunciados.
             if (checking != null) {
-                stmt = con.prepareStatement(SelectEnunciadoID);
+                stmt = con.prepareStatement(SelectEnunciadoId);
                 stmt.setString(1, checking);
             } else {
                 stmt = con.prepareStatement(SelectEnunciado);

@@ -139,6 +139,7 @@ public class Menu {
                     System.out.println("Disponible: " + "NO");
                 }
                 System.out.println("Ruta: " + enunciado.getRuta());
+                System.out.println(" \n");
             }
         }
 
